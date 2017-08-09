@@ -1,13 +1,13 @@
 "use strict";
 
-var fs = require('fs'),
+let fs = require('fs'),
     soap = require('..'),
     assert = require('assert'),
     request = require('request'),
     http = require('http'),
     lastReqAddress;
 
-var test = {};
+let test = {};
 test.server = null;
 test.service = {
   StockQuoteService: {
@@ -49,7 +49,7 @@ test.service = {
       IsValidPrice: function(args, cb, soapHeader, req) {
         lastReqAddress = req.connection.remoteAddress;
 
-        var validationError = {
+        let validationError = {
           Fault: {
             Code: {
               Value: "soap:Sender",
@@ -60,14 +60,14 @@ test.service = {
           }
         };
 
-        var isValidPrice = function() {
-          var price = args.price;
+        let isValidPrice = function() {
+          let price = args.price;
           if(isNaN(price) || (price === ' ')) {
             return cb(validationError);
           }
 
           price = parseInt(price, 10);
-          var validPrice = (price > 0 && price < Math.pow(10, 5));
+          let validPrice = (price > 0 && price < Math.pow(10, 5));
           return cb(null, { valid: validPrice });
         };
 
@@ -157,7 +157,7 @@ describe('SOAP Server with Options', function() {
 
 
   it('should escapeXML in response body', function(done) {
-    var responseData = '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:tns="http://example.com/stockquote.wsdl" xmlns:xsd1="http://example.com/stockquote.xsd"><soap:Body><xsd1:TradePrice xmlns:xsd1="http://example.com/stockquote.xsd">&lt;S:Envelope xmlns:S=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;&lt;S:Body&gt;&lt;ns3:UpdateProfileResponse xmlns:ns3=&quot;http://www.bigdatacollect.or/Name/Types&quot; xmlns=&quot;http://www.bigdatacollect.or/Common/Types&quot;&gt;&lt;ns3:Result resultStatusFlag=&quot;SUCCESS&quot;&gt;&lt;IDs&gt;&lt;UniqueID source=&quot;TESTSOURCE&quot;&gt;100&lt;/UniqueID&gt;&lt;/IDs&gt;&lt;/ns3:Result&gt;&lt;/ns3:UpdateProfileResponse&gt;&lt;/S:Body&gt;&lt;/S:Envelope&gt;</xsd1:TradePrice></soap:Body></soap:Envelope>';
+    let responseData = '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:tns="http://example.com/stockquote.wsdl" xmlns:xsd1="http://example.com/stockquote.xsd"><soap:Body><xsd1:TradePrice xmlns:xsd1="http://example.com/stockquote.xsd">&lt;S:Envelope xmlns:S=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;&lt;S:Body&gt;&lt;ns3:UpdateProfileResponse xmlns:ns3=&quot;http://www.bigdatacollect.or/Name/Types&quot; xmlns=&quot;http://www.bigdatacollect.or/Common/Types&quot;&gt;&lt;ns3:Result resultStatusFlag=&quot;SUCCESS&quot;&gt;&lt;IDs&gt;&lt;UniqueID source=&quot;TESTSOURCE&quot;&gt;100&lt;/UniqueID&gt;&lt;/IDs&gt;&lt;/ns3:Result&gt;&lt;/ns3:UpdateProfileResponse&gt;&lt;/S:Body&gt;&lt;/S:Envelope&gt;</xsd1:TradePrice></soap:Body></soap:Envelope>';
     test.server.listen(15099, null, null, function() {
       test.soapServer = soap.listen(test.server, {
         path: '/stockquote',
@@ -186,7 +186,7 @@ describe('SOAP Server with Options', function() {
   });
 
   it('should not escapeXML response in body', function(done) {
-    var responseData = '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:tns="http://example.com/stockquote.wsdl" xmlns:xsd1="http://example.com/stockquote.xsd"><soap:Body><xsd1:TradePrice xmlns:xsd1="http://example.com/stockquote.xsd"><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><ns3:UpdateProfileResponse xmlns:ns3="http://www.bigdatacollect.or/Name/Types" xmlns="http://www.bigdatacollect.or/Common/Types"><ns3:Result resultStatusFlag="SUCCESS"><IDs><UniqueID source="TESTSOURCE">100</UniqueID></IDs></ns3:Result></ns3:UpdateProfileResponse></S:Body></S:Envelope></xsd1:TradePrice></soap:Body></soap:Envelope>';
+    let responseData = '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"  xmlns:tns="http://example.com/stockquote.wsdl" xmlns:xsd1="http://example.com/stockquote.xsd"><soap:Body><xsd1:TradePrice xmlns:xsd1="http://example.com/stockquote.xsd"><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><ns3:UpdateProfileResponse xmlns:ns3="http://www.bigdatacollect.or/Name/Types" xmlns="http://www.bigdatacollect.or/Common/Types"><ns3:Result resultStatusFlag="SUCCESS"><IDs><UniqueID source="TESTSOURCE">100</UniqueID></IDs></ns3:Result></ns3:UpdateProfileResponse></S:Body></S:Envelope></xsd1:TradePrice></soap:Body></soap:Envelope>';
     test.server.listen(15099, null, null, function() {
       test.soapServer = soap.listen(test.server, {
         path: '/stockquote',

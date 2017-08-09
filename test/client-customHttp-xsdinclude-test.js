@@ -1,6 +1,6 @@
 'use strict';
 
-var soap = require('..'),
+let soap = require('..'),
     http = require('http'),
     assert = require('assert'),
   req = require('request'),
@@ -13,7 +13,7 @@ it('should allow customization of httpClient, the wsdl file, and associated data
 
   //Make a custom http agent to use streams instead of a real net socket
   function CustomAgent(options, wsdl, xsd){
-    var self = this;
+    let self = this;
     events.EventEmitter.call(this);
     self.requests = [];
     self.maxSockets = 1;
@@ -42,12 +42,12 @@ it('should allow customization of httpClient, the wsdl file, and associated data
   util.inherits(MyHttpClient, httpClient);
 
   MyHttpClient.prototype.request = function(rurl, data, callback, exheaders, exoptions) {
-    var self = this;
-    var options = self.buildRequest(rurl, data, exheaders, exoptions);
+    let self = this;
+    let options = self.buildRequest(rurl, data, exheaders, exoptions);
     //Specify agent to use
     options.agent = this.agent;
-    var headers = options.headers;
-    var req = self._request(options, function(err, res, body) {
+    let headers = options.headers;
+    let req = self._request(options, function(err, res, body) {
       if (err) {
         return callback(err);
       }
@@ -60,18 +60,18 @@ it('should allow customization of httpClient, the wsdl file, and associated data
     return req;
   };
 
-  var httpCustomClient = new MyHttpClient({},
+  let httpCustomClient = new MyHttpClient({},
     createSocketStream(__dirname + '/wsdl/xsdinclude/xsd_include_http.wsdl', 2708),
     createSocketStream(__dirname + '/wsdl/xsdinclude/types.xsd', 982)
   );
-  var url = 'http://localhost:50000/Dummy.asmx?wsdl';
+  let url = 'http://localhost:50000/Dummy.asmx?wsdl';
   soap.createClient(url,
     {httpClient: httpCustomClient},
     function(err, client) {
       assert.ok(client);
       assert.ok(!err);
       assert.equal(client.httpClient, httpCustomClient);
-      var description = (client.describe());
+      let description = (client.describe());
       assert.deepEqual(client.describe(), {
         DummyService: {
           DummyPortType: {

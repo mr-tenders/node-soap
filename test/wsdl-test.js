@@ -1,10 +1,10 @@
 "use strict";
 
-var fs = require('fs'),
+let fs = require('fs'),
     soap = require('..'),
     assert = require('assert');
 
-var wsdlStrictTests = {},
+let wsdlStrictTests = {},
     wsdlNonStrictTests = {};
 
 fs.readdirSync(__dirname+'/wsdl/strict').forEach(function(file) {
@@ -74,7 +74,7 @@ wsdlStrictTests['should get the parent namespace when parent namespace is empty 
 };
 
 wsdlStrictTests['should describe extended elements in correct order'] = function(done) {
-  var expected = '{"DummyService":{"DummyPortType":{"Dummy":{"input":{"DummyRequest":{"DummyField1":"xs:string","DummyField2":"xs:string"},"ExtendedDummyField":"xs:string"},"output":{"DummyResult":"c:DummyResult"}}}}}';
+  let expected = '{"DummyService":{"DummyPortType":{"Dummy":{"input":{"DummyRequest":{"DummyField1":"xs:string","DummyField2":"xs:string"},"ExtendedDummyField":"xs:string"},"output":{"DummyResult":"c:DummyResult"}}}}}';
   soap.createClient(__dirname+'/wsdl/extended_element.wsdl', function(err, client){
     assert.ok(!err);
     assert.equal(JSON.stringify(client.describe()), expected);
@@ -83,7 +83,7 @@ wsdlStrictTests['should describe extended elements in correct order'] = function
 };
 
 wsdlStrictTests['should handle element ref'] = function(done) {
-  var expectedMsg = '<ns1:fooRq xmlns:ns1="http://example.com/bar/xsd"' +
+  let expectedMsg = '<ns1:fooRq xmlns:ns1="http://example.com/bar/xsd"' +
     ' xmlns="http://example.com/bar/xsd"><bar1:paymentRq' +
     ' xmlns:bar1="http://example.com/bar1/xsd">' +
     '<bar1:bankSvcRq>' +
@@ -99,8 +99,8 @@ wsdlStrictTests['should handle element ref'] = function(done) {
 };
 
 wsdlStrictTests['should handle type ref'] = function(done) {
-  var expectedMsg = require('./wsdl/typeref/request.xml.js');
-  var reqJson = require('./wsdl/typeref/request.json');
+  let expectedMsg = require('./wsdl/typeref/request.xml.js');
+  let reqJson = require('./wsdl/typeref/request.json');
   soap.createClient(__dirname + '/wsdl/typeref/order.wsdl', {strict: true}, function(err, client) {
     assert.ok(!err);
     client.order(reqJson, function(err, result) {
@@ -111,13 +111,13 @@ wsdlStrictTests['should handle type ref'] = function(done) {
 };
 
 wsdlStrictTests['should get empty namespace prefix'] = function(done) {
-  var expectedMsg = '<ns1:fooRq xmlns:ns1="http://example.com/bar/xsd"' +
+  let expectedMsg = '<ns1:fooRq xmlns:ns1="http://example.com/bar/xsd"' +
     ' xmlns="http://example.com/bar/xsd"><bar1:paymentRq' +
     ' xmlns:bar1="http://example.com/bar1/xsd">' +
     '<bar1:bankSvcRq>' +
     '<requestUID>001</requestUID></bar1:bankSvcRq>' +
     '</bar1:paymentRq></ns1:fooRq>';
-  // var expectedMsg = 'gg';
+  // let expectedMsg = 'gg';
 
   soap.createClient(__dirname + '/wsdl/elementref/foo.wsdl', {strict: true}, function(err, client) {
     assert.ok(!err);
@@ -129,7 +129,7 @@ wsdlStrictTests['should get empty namespace prefix'] = function(done) {
 };
 
 wsdlNonStrictTests['should load same namespace from included xsd'] = function(done) {
-  var expected = '{"DummyService":{"DummyPortType":{"Dummy":{"input":{"ID":"IdType|xs:string|pattern","Name":"NameType|xs:string|minLength,maxLength"},"output":{"Result":"dummy:DummyList"}}}}}';
+  let expected = '{"DummyService":{"DummyPortType":{"Dummy":{"input":{"ID":"IdType|xs:string|pattern","Name":"NameType|xs:string|minLength,maxLength"},"output":{"Result":"dummy:DummyList"}}}}}';
   soap.createClient(__dirname + '/wsdl/xsdinclude/xsd_include.wsdl', function(err, client) {
     assert.ok(!err);
     assert.equal(JSON.stringify(client.describe()), expected);

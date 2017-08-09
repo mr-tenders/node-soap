@@ -1,6 +1,6 @@
 'use strict';
 
-var fs = require('fs'),
+let fs = require('fs'),
   duplexer = require('duplexer'),
   semver = require('semver'),
   should = require('should'),
@@ -10,9 +10,9 @@ var fs = require('fs'),
 module.exports = function createSocketStream(file, length) {
   //Create a duplex stream
 
-  var httpReqStream = new stream.PassThrough();
-  var httpResStream = new stream.PassThrough();
-  var socketStream = duplexer(httpReqStream, httpResStream);
+  let httpReqStream = new stream.PassThrough();
+  let httpResStream = new stream.PassThrough();
+  let socketStream = duplexer(httpReqStream, httpResStream);
 
   // Node 4.x requires cork/uncork
   socketStream.cork = function() {
@@ -27,13 +27,13 @@ module.exports = function createSocketStream(file, length) {
   socketStream.req = httpReqStream;
   socketStream.res = httpResStream;
 
-  var wsdl = fs.readFileSync(file).toString('utf8');
+  let wsdl = fs.readFileSync(file).toString('utf8');
   //Should be able to read from stream the request
   socketStream.req.once('readable', function readRequest() {
-    var chunk = socketStream.req.read();
+    let chunk = socketStream.req.read();
     should.exist(chunk);
 
-    var header = 'HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\nContent-Length: ' + length + '\r\n\r\n';
+    let header = 'HTTP/1.1 200 OK\r\nContent-Type: text/xml; charset=utf-8\r\nContent-Length: ' + length + '\r\n\r\n';
 
     //This is for compatibility with old node releases <= 0.10
     //Hackish
@@ -44,7 +44,7 @@ module.exports = function createSocketStream(file, length) {
       });
     }
     //Now write the response with the wsdl
-    var state = socketStream.res.write(header+wsdl);
+    let state = socketStream.res.write(header+wsdl);
   });
 
   return socketStream;

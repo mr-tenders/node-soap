@@ -1,12 +1,12 @@
 "use strict";
 
-var fs = require('fs'),
+let fs = require('fs'),
     soap = require('..'),
     https = require('https'),
     constants = require('constants'),
     assert = require('assert');
 
-var test = {};
+let test = {};
 test.service = {
   StockQuoteService: {
     StockQuotePort: {

@@ -1,8 +1,8 @@
 'use strict';
 
 describe('BearerSecurity', function() {
-  var BearerSecurity = require('../../').BearerSecurity;
-  var token = "token";
+  let BearerSecurity = require('../../').BearerSecurity;
+  let token = "token";
 
   it('is a function', function() {
     BearerSecurity.should.be.type('function');
@@ -14,9 +14,9 @@ describe('BearerSecurity', function() {
     });
 
     it('is used in addOptions', function() {
-      var options = {};
-      var defaultOptions = { foo: 2 };
-      var instance = new BearerSecurity(token, defaultOptions);
+      let options = {};
+      let defaultOptions = { foo: 2 };
+      let instance = new BearerSecurity(token, defaultOptions);
       instance.addOptions(options);
       options.should.have.property("foo", 2);
     });

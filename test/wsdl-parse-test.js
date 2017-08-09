@@ -1,8 +1,8 @@
 'use strict';
 
-var path = require('path');
-var open_wsdl = require('../lib/wsdl').open_wsdl;
-var assert = require('assert');
+let path = require('path');
+let open_wsdl = require('../lib/wsdl').open_wsdl;
+let assert = require('assert');
 
 describe(__filename, function () {
   it('should parse recursive elements', function (done) {
